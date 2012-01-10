@@ -1,11 +1,11 @@
 %define name		CharLS
-%define major		2
+%define major		1
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
 
 Name:           %{name}
 Version:        1.0
-Release:        1
+Release:        2
 License:        BSD
 Summary:        A JPEG-LS library
 Url:            http://charls.codeplex.com/
