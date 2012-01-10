@@ -30,6 +30,7 @@ open source and commercial JPEG LS implementations.
 Summary:        Libraries and headers for CharLS
 Group:          Development/C
 Requires:       %{libname} = %{version}
+Provides:	CharLS-devel
 
 %description -n %{develname}
 This package contains libraries and headers for CharLS.
