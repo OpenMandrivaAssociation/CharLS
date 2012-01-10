@@ -17,6 +17,7 @@ Patch0:         CharLS-1.0-suse-add_cmake_install_target.patch
 Patch1:         CharLS-1.0-suse-add_sharedlib_soname.patch
 # PATCH-FIX-OPENSUSE charls_fix_tests.patch asterios.dramis@gmail.com -- Fix tests
 Patch2:         CharLS-1.0-suse-fix_tests.patch
+BuildRequires:	cmake
 BuildRequires:	dos2unix
 
 %description
