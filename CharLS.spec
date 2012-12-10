@@ -75,3 +75,14 @@ ctest .
 
 %files -n %{libname}
 %{_libdir}/libCharLS.so.%{major}*
+
+
+%changelog
+* Tue Jan 10 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 1.0-2
++ Revision: 759512
+- fixed mistake in previous commit
+- release bump
+- add provides foe -devel package
+- BR cmake
+- imported package CharLS
+
