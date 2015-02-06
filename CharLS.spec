@@ -5,7 +5,7 @@
 
 Name:           %{name}
 Version:        1.0
-Release:        2
+Release:        3
 License:        BSD
 Summary:        A JPEG-LS library
 Url:            http://charls.codeplex.com/
