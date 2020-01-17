@@ -1,24 +1,19 @@
 %define name		CharLS
-%define major		1
+%define gzname		charls
+%define major		2
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
 
 Name:           %{name}
-Version:        1.0
-Release:        3
+Version:        2.1.0
+Release:        1
 License:        BSD
 Summary:        A JPEG-LS library
-Url:            http://charls.codeplex.com/
+Url:            https://github.com/team-charls/charls
 Group:          System/Libraries
-Source0:        %{name}-source-%{version}.zip
-# PATCH-FIX-OPENSUSE charls_add_cmake_install_target.patch asterios.dramis@gmail.com -- Add a cmake install target for CharLS header files
-Patch0:         CharLS-1.0-suse-add_cmake_install_target.patch
-# PATCH-FIX-OPENSUSE charls_add_sharedlib_soname.patch asterios.dramis@gmail.com -- Add soname to generated shared lib and install libCharLS.so
-Patch1:         CharLS-1.0-suse-add_sharedlib_soname.patch
-# PATCH-FIX-OPENSUSE charls_fix_tests.patch asterios.dramis@gmail.com -- Fix tests
-Patch2:         CharLS-1.0-suse-fix_tests.patch
+Source0:        https://github.com/team-charls/charls/archive/%{gzname}-%{version}.tar.gz
+
 BuildRequires:	cmake
-BuildRequires:	dos2unix
 
 %description
 An optimized implementation of the JPEG-LS standard for lossless and
@@ -46,11 +41,7 @@ matches JPEG 2000 compression ratios. In terms of speed, CharLS outperforms
 open source and commercial JPEG LS implementations.
 
 %prep
-%setup -c -q
-dos2unix *.h *.c* *.txt
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%setup -n %{gzname}-%{version}
 
 %build
 %cmake \
@@ -69,20 +60,11 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 ctest .
 
 %files -n %{develname}
-%doc License.txt
-%{_includedir}/CharLS/
+%doc LICENSE.md README.md SECURITY.md
+%{_includedir}/charls/
 %{_libdir}/*.so
 
 %files -n %{libname}
-%{_libdir}/libCharLS.so.%{major}*
+%{_libdir}/libcharls.so.%{major}*
 
-
-%changelog
-* Tue Jan 10 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 1.0-2
-+ Revision: 759512
-- fixed mistake in previous commit
-- release bump
-- add provides foe -devel package
-- BR cmake
-- imported package CharLS
 
