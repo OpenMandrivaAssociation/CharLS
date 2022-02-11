@@ -73,5 +73,5 @@ rm CharLS*.sln* -v
 %check
 pushd build
 # Enter a key + enter to finish
-echo "a" | ./charlstest
+echo "a" | LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./charlstest
 popd
