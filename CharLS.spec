@@ -1,12 +1,14 @@
 %define major		2
-%define libname		%mklibname %{name} %{major}
-%define develname	%mklibname %{name} %{major} -d
+%define oldlibname	%mklibname %{name} %{major}
+%define olddevname	%mklibname %{name} %{major} -d
+%define libname		%mklibname %{name}
+%define develname	%mklibname %{name} -d
 
 %define lname		%(echo %name | tr [:upper:] [:lower:])
 
 Summary:        A C++ JPEG-LS library implementation
 Name:           CharLS
-Version:        2.0.0
+Version:        2.3.4
 Release:        1
 License:        BSD
 Url:            https://github.com/team-charls/charls
@@ -23,25 +25,10 @@ open source and commercial JPEG LS implementations.
 
 #---------------------------------------------------------------------------
 
-%package -n %{develname}
-Summary:        Libraries and headers for CharLS
-Group:          Development/C
-Requires:       %{libname} = %{version}
-Provides:	CharLS-devel
-
-%description -n %{develname}
-This package contains libraries and headers for CharLS.
-
-%files -n %{develname}
-%doc README.md
-%{_includedir}/CharLS/
-%{_libdir}/*.so
-
-#---------------------------------------------------------------------------
-
 %package -n %{libname}
-Summary:        A JPEG-LS library
-Group:          System/Libraries
+Summary:	A JPEG-LS library
+Group:		System/Libraries
+Obsoletes:	%{oldlibname}
 
 %description -n %{libname}
 An optimized implementation of the JPEG-LS standard for lossless and
@@ -54,6 +41,23 @@ open source and commercial JPEG LS implementations.
 
 #---------------------------------------------------------------------------
 
+%package -n %{devname}
+Summary:        Libraries and headers for CharLS
+Group:          Development/C
+Requires:       %{libname} = %{version}
+Provides:	CharLS-devel
+Obsoletes:	%{olddevname}
+
+%description -n %{devname}
+This package contains libraries and headers for CharLS.
+
+%files -n %{devname}
+%doc README.md
+%{_includedir}/CharLS/
+%{_libdir}/*.so
+
+#---------------------------------------------------------------------------
+
 %prep
 %autosetup -n %{lname}-%{version}
 rm CharLS*.sln* -v
@@ -61,8 +65,9 @@ rm CharLS*.sln* -v
 %build
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=ON \
-	-DCMAKE_BUILD_TYPE:STRING="Release" \
-	-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
+	-DCHARLS_PEDANTIC_WARNINGS:BOOL=ON \
+	-DCHARLS_BUILD_SAMPLES:BOOL=ON \
+	-DCHARLS_BUILD_TESTS:BOOL=ON \
 	-DBUILD_TESTING:BOOL=ON \
 	-G Ninja
 %ninja_build	
@@ -71,7 +76,8 @@ rm CharLS*.sln* -v
 %ninja_install -C build
 
 %check
-pushd build
+pushd build/test
 # Enter a key + enter to finish
-echo "a" | LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./charlstest
+echo "a" | LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./charlstest -unittest
 popd
+
