@@ -1,6 +1,6 @@
 %define major		2
 %define libname		%mklibname %{name}
-%define develname	%mklibname %{name} -d
+%define devname		%mklibname %{name} -d
 %define oldlibname	%mklibname %{name} %{major}
 %define olddevname	%mklibname %{name} %{major} -d
 
@@ -9,7 +9,7 @@
 Summary:        A C++ JPEG-LS library implementation
 Name:           charls
 Version:        2.3.4
-Release:        1
+Release:        2
 License:        BSD
 Url:            https://github.com/team-charls/charls
 Group:          System/Libraries
