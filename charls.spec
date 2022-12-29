@@ -1,19 +1,19 @@
 %define major		2
-%define oldlibname	%mklibname %{name} %{major}
-%define olddevname	%mklibname %{name} %{major} -d
 %define libname		%mklibname %{name}
 %define develname	%mklibname %{name} -d
+%define oldlibname	%mklibname %{name} %{major}
+%define olddevname	%mklibname %{name} %{major} -d
 
-%define lname		%(echo %name | tr [:upper:] [:lower:])
+%define oname		%(echo %name | tr [:upper:] [:lower:])
 
 Summary:        A C++ JPEG-LS library implementation
-Name:           CharLS
+Name:           charls
 Version:        2.3.4
 Release:        1
 License:        BSD
 Url:            https://github.com/team-charls/charls
 Group:          System/Libraries
-Source0:        https://github.com/team-charls/%{lname}/archive/%{version}/%{lname}-%{version}.tar.gz
+Source0:        https://github.com/team-charls/charls/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:	cmake
 BuildRequires:	ninja
 
@@ -28,6 +28,7 @@ open source and commercial JPEG LS implementations.
 %package -n %{libname}
 Summary:	A JPEG-LS library
 Group:		System/Libraries
+# Intentionally unversioned, because libname should not contain version number
 Obsoletes:	%{oldlibname}
 
 %description -n %{libname}
@@ -37,7 +38,7 @@ matches JPEG 2000 compression ratios. In terms of speed, CharLS outperforms
 open source and commercial JPEG LS implementations.
 
 %files -n %{libname}
-%{_libdir}/libCharLS.so.%{major}*
+%{_libdir}/lib%{name}.so.%{major}*
 
 #---------------------------------------------------------------------------
 
@@ -46,6 +47,7 @@ Summary:        Libraries and headers for CharLS
 Group:          Development/C
 Requires:       %{libname} = %{version}
 Provides:	CharLS-devel
+# Intentionally unversioned, because libname should not contain version number
 Obsoletes:	%{olddevname}
 
 %description -n %{devname}
@@ -53,22 +55,22 @@ This package contains libraries and headers for CharLS.
 
 %files -n %{devname}
 %doc README.md
-%{_includedir}/CharLS/
+%{_includedir}/%{name}/
 %{_libdir}/*.so
+%{_libdir}/cmake/%{name}
+%{_libdir}/pkgconfig/%{name}.pc
 
 #---------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{lname}-%{version}
+%autosetup -p1
 rm CharLS*.sln* -v
 
 %build
 %cmake \
-	-DBUILD_SHARED_LIBS:BOOL=ON \
-	-DCHARLS_PEDANTIC_WARNINGS:BOOL=ON \
 	-DCHARLS_BUILD_SAMPLES:BOOL=ON \
 	-DCHARLS_BUILD_TESTS:BOOL=ON \
-	-DBUILD_TESTING:BOOL=ON \
+	-DCHARLS_PEDANTIC_WARNINGS:BOOL=ON \
 	-G Ninja
 %ninja_build	
 
@@ -76,8 +78,5 @@ rm CharLS*.sln* -v
 %ninja_install -C build
 
 %check
-pushd build/test
-# Enter a key + enter to finish
-echo "a" | LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./charlstest -unittest
-popd
+echo "a" | LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH %ninja test -C build
 
