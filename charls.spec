@@ -8,7 +8,7 @@
 
 Summary:        A C++ JPEG-LS library implementation
 Name:           charls
-Version:        2.4.0
+Version:        2.4.1
 Release:        1
 License:        BSD
 Url:            https://github.com/team-charls/charls
