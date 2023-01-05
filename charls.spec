@@ -4,15 +4,13 @@
 %define oldlibname	%mklibname %{name} %{major}
 %define olddevname	%mklibname %{name} %{major} -d
 
-%define oname		%(echo %name | tr [:upper:] [:lower:])
-
 Summary:        A C++ JPEG-LS library implementation
 Name:           charls
 Version:        2.4.1
 Release:        1
 License:        BSD
-Url:            https://github.com/team-charls/charls
 Group:          System/Libraries
+Url:            https://github.com/team-charls/charls
 Source0:        https://github.com/team-charls/charls/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:	cmake
 BuildRequires:	ninja
